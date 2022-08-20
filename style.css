@@ -10,20 +10,24 @@
   height: 100vh;
   border: 2px solid #006100;
   }
-#egg{
-  max-width: 20%;
-  height: auto;
+#canvas{
   border: 2px solid #006100;
-  }
-#imgContainer{
-  text-align: center;
-  border: 2px solid #006100;
-  display: block;
+}
+img{
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
 }
 .btn{
   background-color: aqua;
-  border: 2px solid #006100;
 	padding: 16px;
 	border-radius: 16px;
-
+  border: none;
+}
+.btn:hover{
+  background-color: rgba(255, 34, 0, 0.771);
+}
+.btn:active{
+  background-color: blue;
 }

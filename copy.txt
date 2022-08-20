@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html lang ="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Game</title>
+    <link rel="stylesheet" type="text/css" href="style.css"/>
+
+  </head>
+  <body>
+
+  <div id ="content">
+        <div id = "imgContainer">
+          <div>
+              <img id="egg" src="images/egg.png">      
+          </div>              
+          <div>
+            <button id = "option" class="btn" type="button">Click Me!</button>
+          </div>   
+        </div>  
+  </div>
+
+    <script src="app.js">    </script>
+  
+  </body>
+</html>
+
+*{
+  background-color:rgb(40, 40, 40)
+}
+
+
+#content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  border: 2px solid #006100;
+  }
+#egg{
+  max-width: 50%;
+  height: auto;
+  border: 2px solid #006100;
+  }
+#imgContainer{
+  text-align: center;
+  border: 2px solid #65ae65;
+  display: block;
+}
+.btn{
+  background-color: aqua;
+	padding: 16px;
+	border-radius: 16px;
+  border: none;
+}
+.btn:hover{
+  background-color: rgba(255, 34, 0, 0.771);
+}
+.btn:active{
+  background-color: blue;
+}
