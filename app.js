@@ -17,10 +17,12 @@ egg.src = 'images/egg.png';
 const animals = new Image();
 animals.src = 'images/animals.png';
 
+const arrowKeys = new Image();
+arrowKeys.src = 'images/ArrowKeys.png';
+
 
 var satge = "";
-var refreshIntervalIdAnimals;
-var refreshIntervalIdHouses;
+var refreshIntervalId;
 
 function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
@@ -144,10 +146,7 @@ class Animal{
         this.sheetLocY = this.color.sheetLocY;
         this.sX = 96;
         this.sY = 96;   
-    }
-
-
-    
+    } 
     animateIdle(){
         clear(this.x, this.y, this.sY,this.sY)
         this.frame++;
@@ -159,13 +158,112 @@ class Animal{
     clickChose(mouseX, mouseY){
         if(mouseX > this.x && mouseX < this.x +this.sX && mouseY > this.y && mouseY < this.y + this.sY){
            clear(0,0,canvas.width, canvas.height)
-           clearInterval(refreshIntervalIdAnimals);   
+           clearInterval(refreshIntervalId);   
            stage = "choseHouse";
-           alert(stage);
-           refreshIntervalIdAnimals = setInterval(animateHouses,500);
+           refreshIntervalId = setInterval(animateHouses,500);
            chosenAnimal = this;
         }
     } 
+    changeColor(direction){
+        let index = this.type.colors.findIndex((colorIndex) => colorIndex == this.color)
+        if(direction == "up"){
+            index++;       
+        if(index < 0 || index >= this.type.colors.length){
+            index = 0;
+            }
+        }
+        else if(direction == "down"){
+            index--;
+            if(index < 0 || index >= this.type.colors.length){
+                index = this.type.colors.length-1;
+            }
+        }        
+       
+ 
+        this.color = this.type.colors[index];
+        this.sheetLocX = this.color.sheetLocX;
+        this.sheetLocY = this.color.sheetLocY;
+    }
+
+    
+}
+
+class Arrow{
+
+    directionsOfArrow =[
+        {
+            name: "right",
+            states: [
+            {
+                name:"idle",
+                sheetLocX: 240,
+                sheetLocY: 30,
+            },
+            {
+                name:"cliked",
+                sheetLocX: 240,
+                sheetLocY: 270,
+            }
+            ]
+        },
+        {
+            name: "left",
+            states: [
+            {
+                name:"idle",
+                sheetLocX: 30,
+                sheetLocY: 30,
+            },
+            {
+                name:"cliked",
+                sheetLocX: 30,
+                sheetLocY: 270,
+            }
+            ]
+        },
+
+    ]
+
+    constructor(x,y, givenDirection){
+        this.x = x;
+        this.y = y;
+        this.frame = 0;
+        this.direction = this.directionsOfArrow.find((directionOfArrow) => directionOfArrow.name == givenDirection);
+        this.sX = 190;
+        this.sY = 220;  
+        this.scaledX = 95;
+        this.scaledY = 110;
+    }
+    
+    draw(givenState){
+        this.state = this.direction.states.find((state) => state.name == givenState);
+        this.sheetLocX = this.state.sheetLocX;
+        this.sheetLocY = this.state.sheetLocY;
+        drawSprite(arrowKeys, this.sheetLocX, this.sheetLocY, this.sX, this.sY, this.x, this.y, this.scaledX, this.scaledY);
+    }
+
+    clickClicked(mouseX, mouseY){
+        if(mouseX > this.x && mouseX < this.x +this.scaledX && mouseY > this.y && mouseY < this.y + this.scaledY){
+           clear(this.x, this.y, this.scaledX,this.scaledY)
+           this.draw("cliked"); 
+
+            if (this.direction.name == "right"){
+                chosenAnimal.changeColor("up");
+            }
+            if (this.direction.name == "left"){
+                chosenAnimal.changeColor("down");
+            }
+
+
+                    
+        }      
+    }
+    reset(){
+            clear(this.x, this.y, this.scaledX,this.scaledY)
+            this.draw("idle");                  
+    }
+
+
 }
 
 class House{
@@ -201,10 +299,18 @@ class House{
     click(mouseX, mouseY){
         if(mouseX > this.x && mouseX < this.x +this.sX && mouseY > this.y && mouseY < this.y + this.sY){
            clear(0,0,canvas.width, canvas.height);
-        }
-        
+           clearInterval(refreshIntervalId);
+           stage = "choseColor";
+           chosenAnimal.x = canvas.width/2-chosenAnimal.sX/2;
+           chosenAnimal.y = canvas.height/2-chosenAnimal.sY/2;
+           refreshIntervalId = setInterval(animateChosenAnimal,100);
+           rightArrow.draw("idle");
+           leftArrow.draw("idle");
+        }       
     } 
 }
+
+
 
 var chosenAnimal;
 
@@ -220,6 +326,10 @@ var houseOne = new House(60,canvas.height/2,200,200, houseFirst);
 
 var houseTwo = new House(350,canvas.height/2,200,200, houseSecond);
 
+var rightArrow = new Arrow(400,250,"right");
+
+var leftArrow = new Arrow (100,250,"left");
+
 function animate(){   
     Mouse.animateIdle();
     Dog.animateIdle();
@@ -227,10 +337,13 @@ function animate(){
     Sheep.animateIdle();  
 }
 
-
 function animateHouses(){
     houseOne.animateIdle();
     houseTwo.animateIdle();
+}
+
+function animateChosenAnimal(){
+    chosenAnimal.animateIdle();
 }
 
 function roundRect(x, y, w, h, radius)
@@ -295,14 +408,26 @@ canvas.addEventListener('click', (event) => {
         houseOne.click(x,y);
         houseTwo.click(x,y);
     }
+    else if(stage == "choseColor"){       
+        rightArrow.clickClicked(x,y);
+        leftArrow.clickClicked(x,y);
+        setTimeout(function(){rightArrow.reset()},150);
+        setTimeout(function(){leftArrow.reset()},150);
+    }
 });
+
+
+
+
 
 
   
 window.onload = function() {
     drawChoseMenu();
-    refreshIntervalIdAnimals = setInterval(animate,100); 
+    refreshIntervalId = setInterval(animate,100); 
+    
 }
+
 
     
 
