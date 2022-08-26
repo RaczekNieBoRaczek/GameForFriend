@@ -16,6 +16,8 @@ egg.src = 'images/egg.png';
 
 const animals = new Image();
 animals.src = 'images/animals.png';
+
+
 var satge = "";
 var refreshIntervalIdAnimals;
 var refreshIntervalIdHouses;
@@ -33,22 +35,115 @@ function clear(sX,sY,dX,dY){
 }
 
 class Animal{
-        colors = [
+        TypesOfAnimals = [
         {
-            name: "brown",
-            sheetLocX: 384,
-            sheetLocY: 864,
-        }
+            name: "mouse",
+            colors:[
+                {
+                    name: "brown",
+                    sheetLocX: 384,
+                    sheetLocY: 864,
+                },
+                {
+                    name: "brown-white",
+                    sheetLocX: 384,
+                    sheetLocY: 1152,
+                },
+                {
+                    name: "white",
+                    sheetLocX: 1152,
+                    sheetLocY: 864,
+                },
+                {
+                    name: "grey",
+                    sheetLocX: 1152,
+                    sheetLocY: 1152,
+                }
+
+            ],          
+        },
+        {
+            name: "wolf",
+            colors:[
+                {
+                    name: "grey-white",
+                    sheetLocX: 0,
+                    sheetLocY: 2304,
+                },
+                {
+                    name: "orange-white",
+                    sheetLocX: 0,
+                    sheetLocY: 2592,
+                },
+                {
+                    name: "grey",
+                    sheetLocX: 384,
+                    sheetLocY: 2304,
+                },
+                {
+                    name: "black",
+                    sheetLocX: 384,
+                    sheetLocY: 2592,
+                },
+                {
+                    name: "grey-brown",
+                    sheetLocX: 768,
+                    sheetLocY: 2304,
+                },
+                {
+                    name: "brown",
+                    sheetLocX: 1152,
+                    sheetLocY: 2304,
+                },
+            ],          
+        },
+        {
+            name: "bear",
+            colors:[
+                {
+                    name: "brown",
+                    sheetLocX: 0,
+                    sheetLocY: 1728,
+                },
+                {
+                    name: "orange",
+                    sheetLocX: 384,
+                    sheetLocY: 1728,
+                },
+                {
+                    name: "black",
+                    sheetLocX: 768,
+                    sheetLocY: 1728,
+                },
+            ],          
+        },
+        {
+            name: "sheep",
+            colors:[
+                {
+                    name: "white",
+                    sheetLocX: 0,
+                    sheetLocY: 2016,
+                },
+                {
+                    name: "brown",
+                    sheetLocX: 378,
+                    sheetLocY: 2016,
+                },
+            ],          
+        },
     ]
 
-    constructor(x,y, sheetLocX, sheetLocY, sX, sY, color){
+    constructor(x,y, givenType, givenColor){
         this.x = x;
         this.y = y;
         this.frame = 0;
-        this.sheetLocX = sheetLocX;
-        this.sheetLocY = sheetLocY;
-        this.sX = sX;
-        this.sY = sY;   
+        this.type = this.TypesOfAnimals.find((typeOfAnimal) => typeOfAnimal.name == givenType);
+        this.color = this.type.colors.find((colorOfAniaml) => colorOfAniaml.name == givenColor);
+        this.sheetLocX = this.color.sheetLocX;
+        this.sheetLocY = this.color.sheetLocY;
+        this.sX = 96;
+        this.sY = 96;   
     }
 
 
@@ -61,13 +156,14 @@ class Animal{
             this.frame = 0;
         }  
     }
-    click(mouseX, mouseY){
+    clickChose(mouseX, mouseY){
         if(mouseX > this.x && mouseX < this.x +this.sX && mouseY > this.y && mouseY < this.y + this.sY){
            clear(0,0,canvas.width, canvas.height)
            clearInterval(refreshIntervalIdAnimals);   
            stage = "choseHouse";
            alert(stage);
            refreshIntervalIdAnimals = setInterval(animateHouses,500);
+           chosenAnimal = this;
         }
     } 
 }
@@ -105,28 +201,27 @@ class House{
     click(mouseX, mouseY){
         if(mouseX > this.x && mouseX < this.x +this.sX && mouseY > this.y && mouseY < this.y + this.sY){
            clear(0,0,canvas.width, canvas.height);
-           alert("dup");
         }
         
     } 
 }
 
+var chosenAnimal;
 
+var Mouse = new Animal(80,canvas.height/1.5,"mouse","grey");
 
-var Hamster = new Animal(80,canvas.height/1.5, 384, 864,96,96);
+var Dog = new Animal(200,canvas.height/1.5,"wolf","grey");
 
-var Dog = new Animal(200,canvas.height/1.5,0,2304,96,96);
+var Bear = new Animal(320,canvas.height/1.5,"bear","brown");
 
-var Bear = new Animal(320,canvas.height/1.5,768,1728,96,96);
-
-var Sheep = new Animal(440,canvas.height/1.5,0,2016,96,96);
+var Sheep = new Animal(440,canvas.height/1.5,"sheep","brown");
 
 var houseOne = new House(60,canvas.height/2,200,200, houseFirst);
 
 var houseTwo = new House(350,canvas.height/2,200,200, houseSecond);
 
 function animate(){   
-    Hamster.animateIdle();
+    Mouse.animateIdle();
     Dog.animateIdle();
     Bear.animateIdle();
     Sheep.animateIdle();  
@@ -191,10 +286,10 @@ canvas.addEventListener('click', (event) => {
     const x = event.clientX  -rect.left;
     const y = event.clientY - rect.top;
     if(stage == "choseMenu"){
-        Hamster.click(x,y);
-        Dog.click(x,y);
-        Bear.click(x,y);
-        Sheep.click(x,y);
+        Mouse.clickChose(x,y);
+        Dog.clickChose(x,y);
+        Bear.clickChose(x,y);
+        Sheep.clickChose(x,y);
     }
     else if(stage == "choseHouse"){
         houseOne.click(x,y);
