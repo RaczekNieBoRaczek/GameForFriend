@@ -8,7 +8,9 @@ const ctxBackground = canvasBackground.getContext('2d');
 const CANVASBACKGROUND_HEIGHT = canvasBackground.height = 600;
 const CANVASBACKGROUND_WIDTH = canvasBackground.width = 600;
 
+var Font = new FontFace('myFont', 'url(images/Apple.ttf)');
 
+Font.load();
 
 const houseFirst = new Image();
 houseFirst.src = 'images/house2.png';
@@ -33,6 +35,9 @@ background.src = 'images/GRASS.png';
 
 const clouds = new Image();
 clouds.src = 'images/clouds.png';
+
+const bars = new Image();
+bars.src = 'images/bars.png';
 
 
 var stage = "";
@@ -353,12 +358,11 @@ class Animal{
         this.sheetLocY = this.color.sheetLocY;
     }
     draw(){
-        clear(this.x, this.y, this.sY,this.sY)
+        clear(this.x, this.y, this.sX,this.sY)
         drawSprite(animals,this.sheetLocX+(this.sX*0),this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.sX,this.sY);
     }
     animateIdle(){
-        clear(this.x, this.y, this.sY,this.sY)
-        console.log(this.frame);
+        clear(this.x, this.y, this.sX,this.sY);
         
         if(this.frame == 4){
             this.frame = 0;
@@ -368,7 +372,7 @@ class Animal{
 
     }
     moveUP(){
-        clear(this.x, this.y, this.sY,this.sY)
+        clear(this.x, this.y, this.sX,this.sY)
              
         if(this.frame == 4){
             this.frame = 0;
@@ -384,7 +388,7 @@ class Animal{
 
     }
     moveDOWN(){
-        clear(this.x, this.y, this.sY,this.sY)     
+        clear(this.x, this.y, this.sX,this.sY)     
         if(this.frame == 4){
             this.frame = 0;
         }  
@@ -393,11 +397,8 @@ class Animal{
         this.frame++;
     }
     moveRIGHT(){
-        clear(this.x, this.y, this.sY,this.sY)
-        this.updateDirection("right");
-        console.log(this.frame);
-        console.log(this.sheetLocX);
-        console.log(this.sheetLocY);        
+        clear(this.x, this.y, this.sX,this.sY)
+        this.updateDirection("right");   
         if(this.frame == 4){
             this.frame = 0;
         }  
@@ -407,11 +408,8 @@ class Animal{
 
     }
     moveLEFT(){
-        clear(this.x, this.y, this.sY,this.sY)
-        this.updateDirection("left");
-        console.log(this.frame);
-        console.log(this.sheetLocX);
-        console.log(this.sheetLocY);        
+        clear(this.x, this.y, this.sX,this.sY)
+        this.updateDirection("left");    
         if(this.frame == 4){
             this.frame = 0;
         }  
@@ -425,6 +423,10 @@ class Animal{
            clear(0,0,canvas.width, canvas.height)
            clearInterval(refreshIntervalId);   
            stage = "choseHouse";
+           ctx.font = "30px myFont"; // set font
+           ctx.textAlign = "center"; // center text
+           ctx.fillStyle = "#ffffff "
+           ctx.fillText("Choose House", 300,100);;
            refreshIntervalId = setInterval(animateHouses,500);
            chosenAnimal = this;
         }
@@ -470,12 +472,12 @@ class House{
 
     animateIdle(){
         if(this.frame == 0){
-            clear(this.x, this.y -10, this.sY,this.sY)
+            clear(this.x, this.y -10, this.sX,this.sY)
             drawSpriteSimple(this.img,this.x,this.y,this.sX,this.sY);
             this.frame++;
         }  
         else if(this.frame == 1){
-            clear(this.x, this.y, this.sY,this.sY)
+            clear(this.x, this.y, this.sX,this.sY)
             drawSpriteSimple(this.img,this.x,this.y-10,this.sX,this.sY);
             this.frame = 0;
         }  
@@ -486,6 +488,9 @@ class House{
            clear(0,0,canvas.width, canvas.height);
            clearInterval(refreshIntervalId);
            stage = "choseColor";
+           ctx.textAlign = "center"; // center text
+           ctx.fillStyle = "#ffffff "
+           ctx.fillText("Choose Color", 300,100);;
            chosenAnimal.x = canvas.width/2-chosenAnimal.sX/2;
            chosenAnimal.y = canvas.height/2-chosenAnimal.sY/2;
            refreshIntervalId = setInterval(animateChosenAnimal,100);
@@ -619,7 +624,10 @@ class AcceptBtn{
                    
             window.addEventListener("keydown", keysPressed, false);
             window.addEventListener("keyup", keysReleased, false);  
-            refreshIntervalId = setInterval(function(){  move_able = true;}, 100 );    
+            refreshIntervalId = setInterval(function(){  move_able = true;}, 100 );  
+            foodBar.drawFullLevel();
+            waterBar.drawFullLevel();
+            healthBar.drawFullLevel();
            
         }      
     }
@@ -634,35 +642,156 @@ class AcceptBtn{
     }
 }
 
-class Bar{
 
-    constructor(x,y){
+class Level {
+
+    colorsOfLevels = [
+        {
+            name:"green",
+            sheetLocX: 987,
+            sheetLocY: 168,
+        },
+        {
+            name:"red",
+            sheetLocX: 1176,
+            sheetLocY: 28,
+        },
+        {
+            name:"yellow",
+            sheetLocX: 987,
+            sheetLocY: 28,
+        },
+        {
+            name:"blue",
+            sheetLocX: 1169,
+            sheetLocY: 168,
+        }
+
+    ]
+
+
+    constructor(x,y, givenColor){
         this.x = x;
         this.y = y;
-        this.sX = 310;
-        this.sY = 180;  
-        this.scaledX = 155;
-        this.scaledY = 90;
+        this.sX = 21;
+        this.sY = 35;  
+        this.color = this.colorsOfLevels.find((colorOfLevel) => colorOfLevel.name == givenColor);
+        this.sheetLocX = this.color.sheetLocX;
+        this.sheetLocY = this.color.sheetLocY;
+        this.scaledX = 9;
+        this.scaledY = 16;
+
     }
 
     draw(){
-        clear(this.x, this.y, this.sY,this.sY)
-        drawSprite(animals,this.sheetLocX,this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.sX,this.sY);
+        console.log("draw");
+        clear(this.x, this.y, this.scaledX,this.scaledY)
+        drawSprite(bars,this.sheetLocX,this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.scaledX,this.scaledY);
     }
+    clear(){
+        clear(this.x, this.y, this.scaledX,this.scaledY);
+    }
+    add(){
+        drawSprite(bars,this.sheetLocX,this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.scaledX,this.scaledY);
+    }
+}
+
+var ll = new Level(20,20,"green")
+
+
+class Bar{
+
+    icons = [
+        {
+            name: "heart",
+            sheetLocX: 14,
+            sheetLocY: 28,
+            sX:84,
+            sY:70,
+            scaledX: 24,
+            scaledY: 20,
+        },
+        {
+            name: "food",
+            sheetLocX: 0,
+            sheetLocY: 938,
+            sX:126,
+            sY:140,
+            scaledX: 18,
+            scaledY: 20,
+        },
+        {
+            name: "energy",
+            sheetLocX: 7,
+            sheetLocY: 231,
+            sX: 105,
+            sY: 105,
+            scaledX: 20,
+            scaledY: 20,
+        }
+
+    ]
+
+
+    constructor(x,y, givenColor, givenIcon){
+        this.x = x;
+        this.y = y;
+        this.sX = 329;
+        this.sY = 49;  
+        this.sheetLocX = 455;
+        this.sheetLocY = 147
+        this.scaledX = 148;
+        this.scaledY = 22;
+        this.color = givenColor;
+        this.icon = this.icons.find((iconOfBar) => iconOfBar.name == givenIcon);
+        this.levels = [];
+        for(let i =0 ; i<14 ; i++){
+            this.levels.push((new Level((this.x+5) + (10*i), this.y + 3, this.color)));
+        }
+    }
+
+
+
+    draw(){
+        clear(this.x, this.y, this.scaledX,this.scaledY)
+        drawSprite(bars,this.sheetLocX,this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.scaledX,this.scaledY);  
+        drawSprite(bars,this.icon.sheetLocX,this.icon.sheetLocY,this.icon.sX,this.icon.sY,this.x -30,this.y,this.icon.scaledX,this.icon.scaledY);          
+        this.levels.forEach(element => { element.draw() });
+    }
+    
+
+    drawCertianLevel(x){
+        this.levels = []
+        for(let i =0 ; i<x ; i++){
+            this.levels.push((new Level((this.x+5) + (10*i), this.y + 3, this.color)));
+        }
+        this.draw();
+    }
+
+    drawFullLevel(){
+        this.levels = []
+        for(let i =0 ; i<14 ; i++){
+            this.levels.push((new Level((this.x+5) + (10*i), this.y + 3, this.color)));
+        }
+        this.draw();
+    }
+
 
 
 }
 
+
+
 var chosenAnimal;
 var chosenHouse;
 
-var Mouse = new Animal(80,canvas.height/1.5,"mouse","right","white");
+var Mouse = new Animal(80,canvas.height/1.3,"mouse","right","white");
 
-var Dog = new Animal(200,canvas.height/1.5,"wolf","right","grey");
+var Dog = new Animal(200,canvas.height/1.3,"wolf","right","grey");
 
-var Bear = new Animal(320,canvas.height/1.5,"bear","right","brown");
+var Bear = new Animal(320,canvas.height/1.3,"bear","right","brown");
 
-var Sheep = new Animal(440,canvas.height/1.5,"sheep","right","brown");
+var Sheep = new Animal(440,canvas.height/1.3,"sheep","right","brown");
 
 var houseOne = new House(60,canvas.height/2,200,200, houseFirst);
 
@@ -673,6 +802,14 @@ var rightArrow = new Arrow(400,250,"right");
 var leftArrow = new Arrow (100,250,"left");
 
 var acceptBtn = new AcceptBtn(430,500);
+
+var foodBar = new Bar(430,20, "yellow", "food");
+
+var waterBar = new Bar(430,50, "blue", "energy");
+
+var healthBar = new Bar(430,80, "green", "heart");
+
+
 
 function animate(){   
     Mouse.animateIdle();
@@ -732,7 +869,7 @@ function drawChoseMenu(){
     let w=egg.width;
     let h=egg.height;
     let sizer=scalePreserveAspectRatio(w,h,canvas.width,canvas.height);
-    ctx.drawImage(egg,0,0,w,h,canvas.width/4,canvas.height/8,w*sizer/2,h*sizer/2);   
+    ctx.drawImage(egg,0,0,w,h,canvas.width/4,canvas.height/4,w*sizer/2,h*sizer/2);   
     stage = "choseMenu";  
 };
 
@@ -766,6 +903,7 @@ canvas.addEventListener('click', (event) => {
  
 var keys = [];
  
+var save = 14;
 
 var move_able = true;
 
@@ -776,6 +914,8 @@ function keysPressed(e) {
     
     // left
     if (keys[37] && move_able == true) {
+        save -= 1;
+        foodBar.drawCertianLevel(save);
       chosenAnimal.moveLEFT();
       move_able = false;
     }
@@ -807,8 +947,15 @@ function keysReleased(e) {
     keys[e.keyCode] = false;
 }  
 
+
   
 window.onload = function() {
+    document.fonts.add(Font);
+    
+    ctx.font = "30px myFont"; // set font
+	ctx.textAlign = "center"; // center text
+    ctx.fillStyle = "#ffffff "
+	ctx.fillText("Choose animal", 300,100);
     drawChoseMenu();
     refreshIntervalId = setInterval(animate,100); 
 }
