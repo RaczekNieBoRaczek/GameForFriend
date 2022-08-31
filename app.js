@@ -716,7 +716,7 @@ class AcceptBtn{
                     ctx.fillText("GAME OVER", 305,300);
 
                 }
-            },100);
+            },4000);
             refreshIntervalAllBars = setInterval(function(){
                 foodBar.drawCurrentLevel();
                 energyBar.drawCurrentLevel();
