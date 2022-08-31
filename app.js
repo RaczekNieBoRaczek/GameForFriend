@@ -78,15 +78,15 @@ function renderMap(){
           const tile = map.getTile(c, r);
           if (tile !== 0) { 
             ctxBackground.drawImage(
-                background, // image
-              (tile -1)*80, // source x
-              0, // source y
-              80, // source width
-              80,// source height
-              c * 80, // target x
-              r * 80, // target y
-              80, // target width
-              80 // target height
+                background, 
+              (tile -1)*80, 
+              0, 
+              80, 
+              80,
+              c * 80, 
+              r * 80, 
+              80, 
+              80 
             );
           }
         }
@@ -104,121 +104,321 @@ class Animal{
         TypesOfAnimals = [
         {
             name: "mouse",
-            colors:[
+            direction:
+            [
                 {
-                    name: "brown",
-                    sheetLocX: 384,
-                    sheetLocY: 864,
+                    name:"left",
+                    colors: 
+                    [
+                        {
+                            name: "brown",
+                            sheetLocX: 1536,
+                            sheetLocY: 294,
+                        },
+                        {
+                            name: "brown-white",
+                            sheetLocX: 1536,
+                            sheetLocY: 192,
+                        },
+                        {
+                            name: "white",
+                            sheetLocX: 1536,
+                            sheetLocY: 0,
+                        },
+                        {
+                            name: "grey",
+                            sheetLocX: 1536,
+                            sheetLocY: 96,
+                        },
+                    ]
+                },
+                {
+                    name: "right",
+                    colors: 
+                    [
+                        {
+                            name: "brown",
+                            sheetLocX: 384,
+                            sheetLocY: 864,
+                        },
+                        {
+                            name: "brown-white",
+                            sheetLocX: 384,
+                            sheetLocY: 1152,
+                        },
+                        {
+                            name: "white",
+                            sheetLocX: 1152,
+                            sheetLocY: 864,
+                        },
+                        {
+                            name: "grey",
+                            sheetLocX: 1152,
+                            sheetLocY: 1152,
+                        },
+                    ]
 
-                },
-                {
-                    name: "brown-white",
-                    sheetLocX: 384,
-                    sheetLocY: 1152,
-                },
-                {
-                    name: "white",
-                    sheetLocX: 1152,
-                    sheetLocY: 864,
-                },
-                {
-                    name: "grey",
-                    sheetLocX: 1152,
-                    sheetLocY: 1152,
                 }
-
-            ],          
+            ]
+            
         },
         {
             name: "wolf",
-            colors:[
+            direction:
+            [
                 {
-                    name: "grey-white",
-                    sheetLocX: 0,
-                    sheetLocY: 2304,
+                    name:"left",
+                    colors:
+                    [
+                        {
+                            name: "grey-white",
+                            sheetLocX: 1536,
+                            sheetLocY: 864,
+                        },
+                        {
+                            name: "orange-white",
+                            sheetLocX: 1536,
+                            sheetLocY: 1248,
+                        },
+                        {
+                            name:"grey",
+                            sheetLocX: 1536,
+                            sheetLocY: 960,
+                        },
+                        {
+                            name:"black",
+                            sheetLocX: 1530,
+                            sheetLocY: 1344,
+                        },
+                        {
+                            name:"grey-brown",
+                            sheetLocX: 1530,
+                            sheetLocY: 1056,
+                        },
+                        {
+                            name:"brown",
+                            sheetLocX: 1536,
+                            sheetLocY: 1152,
+                        },
+
+                    ]
                 },
                 {
-                    name: "orange-white",
-                    sheetLocX: 0,
-                    sheetLocY: 2592,
+                    name:"right",
+                    colors:
+                    [
+                        {
+                            name: "grey-white",
+                            sheetLocX: 0,
+                            sheetLocY: 2304,
+                        },
+                        {
+                            name: "orange-white",
+                            sheetLocX: 0,
+                            sheetLocY: 2592,
+                        },
+                        {
+                            name:"grey",
+                            sheetLocX: 384,
+                            sheetLocY: 2304,
+                        },
+                        {
+                            name:"black",
+                            sheetLocX: 384,
+                            sheetLocY: 2592,
+                        },
+                        {
+                            name:"grey-brown",
+                            sheetLocX: 768,
+                            sheetLocY: 2304,
+                        },
+                        {
+                            name:"brown",
+                            sheetLocX: 1152,
+                            sheetLocY: 2304,
+                        },
+
+                    ]
                 },
-                {
-                    name: "grey",
-                    sheetLocX: 384,
-                    sheetLocY: 2304,
-                },
-                {
-                    name: "black",
-                    sheetLocX: 384,
-                    sheetLocY: 2592,
-                },
-                {
-                    name: "grey-brown",
-                    sheetLocX: 768,
-                    sheetLocY: 2304,
-                },
-                {
-                    name: "brown",
-                    sheetLocX: 1152,
-                    sheetLocY: 2304,
-                },
-            ],          
+            ]
+                  
         },
         {
             name: "bear",
-            colors:[
+            direction:
+            [
                 {
-                    name: "brown",
-                    sheetLocX: 0,
-                    sheetLocY: 1728,
+                    name: "left",
+                    colors:
+                    [
+                        {
+                            name:"brown",
+                            sheetLocX: 1536,
+                            sheetLocY: 384,
+                        },
+                        {
+                            name:"orange",
+                            sheetLocX: 1536,
+                            sheetLocY: 480,
+                        },
+                        {
+                            name:"black",
+                            sheetLocX: 1536,
+                            sheetLocY: 576,
+                        },
+                    ]
                 },
                 {
-                    name: "orange",
-                    sheetLocX: 384,
-                    sheetLocY: 1728,
+                    name: "right",
+                    colors:
+                    [
+                        {
+                            name:"brown",
+                            sheetLocX: 0,
+                            sheetLocY: 1728,
+                        },
+                        {
+                            name:"orange",
+                            sheetLocX: 384,
+                            sheetLocY: 1728,
+                            
+                        },
+                        {
+                            name:"black",
+                            sheetLocX: 768,
+                            sheetLocY: 1728,
+                        },
+
+                    ]
                 },
-                {
-                    name: "black",
-                    sheetLocX: 768,
-                    sheetLocY: 1728,
-                },
-            ],          
+            ]          
         },
         {
             name: "sheep",
-            colors:[
+            direction: 
+            [
                 {
-                    name: "white",
-                    sheetLocX: 0,
-                    sheetLocY: 2016,
+                    name: "left",
+                    colors: 
+                    [
+                        {
+                            name: "white",
+                            sheetLocX: 1525,
+                            sheetLocY: 672,
+                        },
+                        {
+                            name: "brown",
+                            sheetLocX: 1536,
+                            sheetLocY: 768,
+                        },
+                    ]
                 },
                 {
-                    name: "brown",
-                    sheetLocX: 378,
-                    sheetLocY: 2016,
-                },
-            ],          
+                    name: "right",
+                    colors: 
+                    [
+                        {
+                            name: "white",
+                            sheetLocX: 0,
+                            sheetLocY: 2016,
+                        },
+                        {
+                            name: "brown",
+                            sheetLocX: 378,
+                            sheetLocY: 2016,
+                        },
+                    ]
+                }
+            ]       
         },
     ]
 
-    constructor(x,y, givenType, givenColor){
+    constructor(x,y, givenType, givenDirection, givenColor){
         this.x = x;
         this.y = y;
         this.frame = 0;
         this.type = this.TypesOfAnimals.find((typeOfAnimal) => typeOfAnimal.name == givenType);
-        this.color = this.type.colors.find((colorOfAniaml) => colorOfAniaml.name == givenColor);
+        this.direction = this.type.direction.find((directionOfAnimal) => directionOfAnimal.name == givenDirection);
+        this.color = this.direction.colors.find((colorOfAnimal) => colorOfAnimal.name == givenColor);
         this.sheetLocX = this.color.sheetLocX;
         this.sheetLocY = this.color.sheetLocY;
         this.sX = 96;
         this.sY = 96;   
+        this.pixelPerMove = 15;
     } 
+    updateDirection(giveDirection){
+        this.direction = this.type.direction.find((directionOfAnimal) => directionOfAnimal.name == giveDirection);
+        this.color = this.direction.colors.find((colorOfAnimal) => colorOfAnimal.name == this.color.name);
+        this.sheetLocX = this.color.sheetLocX;
+        this.sheetLocY = this.color.sheetLocY;
+    }
+    draw(){
+        clear(this.x, this.y, this.sY,this.sY)
+        drawSprite(animals,this.sheetLocX+(this.sX*0),this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.sX,this.sY);
+    }
     animateIdle(){
         clear(this.x, this.y, this.sY,this.sY)
-        this.frame++;
-        drawSprite(animals,this.sheetLocX+(this.sX*this.frame),this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.sX,this.sY);
-        if(this.frame == 3){
+        console.log(this.frame);
+        
+        if(this.frame == 4){
             this.frame = 0;
         }  
+        drawSprite(animals,this.sheetLocX+(this.sX*this.frame),this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.sX,this.sY);
+        this.frame++;   
+
+    }
+    moveUP(){
+        clear(this.x, this.y, this.sY,this.sY)
+             
+        if(this.frame == 4){
+            this.frame = 0;
+        }  
+        if(this.y < 260){
+            this.y = this.y;
+        }else{
+            this.y -= this.pixelPerMove;
+        }
+        
+        drawSprite(animals,this.sheetLocX+(this.sX*this.frame),this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.sX,this.sY);
+        this.frame++;   
+
+    }
+    moveDOWN(){
+        clear(this.x, this.y, this.sY,this.sY)     
+        if(this.frame == 4){
+            this.frame = 0;
+        }  
+        this.y += this.pixelPerMove;
+        drawSprite(animals,this.sheetLocX+(this.sX*this.frame),this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.sX,this.sY);
+        this.frame++;
+    }
+    moveRIGHT(){
+        clear(this.x, this.y, this.sY,this.sY)
+        this.updateDirection("right");
+        console.log(this.frame);
+        console.log(this.sheetLocX);
+        console.log(this.sheetLocY);        
+        if(this.frame == 4){
+            this.frame = 0;
+        }  
+        this.x += this.pixelPerMove;
+        drawSprite(animals,this.sheetLocX+(this.sX*this.frame),this.sheetLocY,this.sX,this.sY,this.x,this.y,this.sX,this.sY);
+        this.frame++;
+
+    }
+    moveLEFT(){
+        clear(this.x, this.y, this.sY,this.sY)
+        this.updateDirection("left");
+        console.log(this.frame);
+        console.log(this.sheetLocX);
+        console.log(this.sheetLocY);        
+        if(this.frame == 4){
+            this.frame = 0;
+        }  
+        this.x -= this.pixelPerMove;
+        drawSprite(animals,this.sheetLocX+(3*this.sX)-(this.sX*this.frame),this.sheetLocY,this.sX,this.sY,this.x,this.y,this.sX,this.sY);
+        this.frame++;
+
     }
     clickChose(mouseX, mouseY){
         if(mouseX > this.x && mouseX < this.x +this.sX && mouseY > this.y && mouseY < this.y + this.sY){
@@ -229,23 +429,22 @@ class Animal{
            chosenAnimal = this;
         }
     } 
-    changeColor(direction){
-        let index = this.type.colors.findIndex((colorIndex) => colorIndex == this.color)
-        if(direction == "up"){
+    changeColor(way){
+        let index = this.direction.colors.findIndex((colorIndex) => colorIndex == this.color)
+        if(way == "up"){
             index++;       
-        if(index < 0 || index >= this.type.colors.length){
+        if(index < 0 || index >= this.direction.colors.length){
             index = 0;
             }
         }
-        else if(direction == "down"){
+        else if(way == "down"){
             index--;
-            if(index < 0 || index >= this.type.colors.length){
-                index = this.type.colors.length-1;
+            if(index < 0 || index >= this.direction.colors.length){
+                index = this.direction.colors.length-1;
             }
         }        
        
- 
-        this.color = this.type.colors[index];
+        this.color = this.direction.colors[index];
         this.sheetLocX = this.color.sheetLocX;
         this.sheetLocY = this.color.sheetLocY;
     }
@@ -400,7 +599,7 @@ class AcceptBtn{
         this.scaledY = 90;
     }
     draw(givenState){
-        this.state = this.statesOfButton.find((stateOfBtn)=> stateOfBtn.name == givenState);
+        this.state = this.statesOfButton.find((stateOfBtn) => stateOfBtn.name == givenState);
         this.sheetLocX = this.state.sheetLocX;
         this.sheetLocY = this.state.sheetLocY;
         drawSprite(acceptButton, this.sheetLocX, this.sheetLocY, this.sX, this.sY, this.x, this.y, this.scaledX, this.scaledY);
@@ -415,11 +614,18 @@ class AcceptBtn{
             chosenAnimal.x = canvas.width/2-chosenAnimal.sX/2;
             chosenAnimal.y = canvas.height/2-chosenAnimal.sY/2;
             chosenHouse.drawHouse(10,40);
-            refreshIntervalId = setInterval(animateChosenAnimal,100);
+            chosenAnimal.draw();
             renderMap();
-            
+                   
+            window.addEventListener("keydown", keysPressed, false);
+            window.addEventListener("keyup", keysReleased, false);  
+            refreshIntervalId = setInterval(function(){  move_able = true;}, 100 );    
+           
         }      
     }
+
+
+
     reset(){
         if(stage == "choseColor"){
             clear(this.x, this.y, this.scaledX,this.scaledY)
@@ -428,16 +634,35 @@ class AcceptBtn{
     }
 }
 
+class Bar{
+
+    constructor(x,y){
+        this.x = x;
+        this.y = y;
+        this.sX = 310;
+        this.sY = 180;  
+        this.scaledX = 155;
+        this.scaledY = 90;
+    }
+
+    draw(){
+        clear(this.x, this.y, this.sY,this.sY)
+        drawSprite(animals,this.sheetLocX,this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.sX,this.sY);
+    }
+
+
+}
+
 var chosenAnimal;
 var chosenHouse;
 
-var Mouse = new Animal(80,canvas.height/1.5,"mouse","grey");
+var Mouse = new Animal(80,canvas.height/1.5,"mouse","right","white");
 
-var Dog = new Animal(200,canvas.height/1.5,"wolf","grey");
+var Dog = new Animal(200,canvas.height/1.5,"wolf","right","grey");
 
-var Bear = new Animal(320,canvas.height/1.5,"bear","brown");
+var Bear = new Animal(320,canvas.height/1.5,"bear","right","brown");
 
-var Sheep = new Animal(440,canvas.height/1.5,"sheep","brown");
+var Sheep = new Animal(440,canvas.height/1.5,"sheep","right","brown");
 
 var houseOne = new House(60,canvas.height/2,200,200, houseFirst);
 
@@ -537,6 +762,50 @@ canvas.addEventListener('click', (event) => {
     }
 });
 
+
+ 
+var keys = [];
+ 
+
+var move_able = true;
+
+function keysPressed(e) {
+    // store an entry for every key pressed
+    keys[e.keyCode] = true;
+    
+    
+    // left
+    if (keys[37] && move_able == true) {
+      chosenAnimal.moveLEFT();
+      move_able = false;
+    }
+ 
+    // right
+    if (keys[39]&& move_able == true) {
+        chosenAnimal.moveRIGHT();
+        move_able = false;
+    }
+ 
+    // up
+    if (keys[38]&& move_able == true) {
+        chosenAnimal.moveUP();
+        move_able = false;
+    }
+ 
+    // down
+    if (keys[40]&& move_able == true) {
+        chosenAnimal.moveDOWN();
+        move_able = false;
+    }
+ 
+    e.preventDefault();
+          
+}
+ 
+function keysReleased(e) {
+    // mark keys that were released
+    keys[e.keyCode] = false;
+}  
 
   
 window.onload = function() {
