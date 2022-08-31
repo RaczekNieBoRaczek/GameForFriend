@@ -8,6 +8,11 @@ const ctxBackground = canvasBackground.getContext('2d');
 const CANVASBACKGROUND_HEIGHT = canvasBackground.height = 600;
 const CANVASBACKGROUND_WIDTH = canvasBackground.width = 600;
 
+const canvasBubble = document.getElementById("layer3");
+const ctxBubble = canvasBubble.getContext('2d');
+const CANVASBubble_HEIGHT = canvasBubble.height = 600;
+const CANVASBubble_WIDTH = canvasBubble.width = 600;
+
 var Font = new FontFace('myFont', 'url(images/Apple.ttf)');
 
 Font.load();
@@ -39,9 +44,20 @@ clouds.src = 'images/clouds.png';
 const bars = new Image();
 bars.src = 'images/bars.png';
 
+const foodBubble = new Image();
+foodBubble.src = 'images/FoodBubble.png';
+
+const energyBubble = new Image();
+energyBubble.src = 'images/EnergyBubble.png';
 
 var stage = "";
 var refreshIntervalId;
+var refreshIntervalIdFoodBar;
+var refreshIntervalIdEnergyBar;
+var refreshIntervalIdHealthBar;
+var refreshIntervalAllBars;
+var refreshIntervalFoodBubble;
+var refreshIntervalEenergyBubble;
 
 function drawSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
     ctx.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
@@ -51,12 +67,33 @@ function drawSpriteSimple(img, dX, dY, dW, dH){
     ctx.drawImage(img,dX,dY,dW,dH)
 }
 
+function clearSprites(sX,sY,dX,dY){
+    ctx.clearRect(sX,sY,dX,dY);
+}
+
+function drawBackgroundSprite(img, sX, sY, sW, sH, dX, dY, dW, dH){
+    ctxBackground.drawImage(img, sX, sY, sW, sH, dX, dY, dW, dH);
+}
+
+function drawBubble(img,dX,dY,dW,dH){
+    ctxBubble.drawImage(img,dX,dY,dW,dH);
+}
+
+function clearBubble(sX,sY,dX,dY){
+    ctxBubble.clearRect(sX,sY,dX,dY);
+}
+
 function clear(sX,sY,dX,dY){
     ctx.clearRect(sX,sY,dX,dY);
 }
 function drawBackground(img, dX, dY, dW, dH){
     ctxBackground.drawImage(img,dX,dY,dW,dH);
 }
+
+function clearBackground(sX,sY,dX,dY){
+    ctxBackground.clearRect(sX,sY,dX,dY);
+}
+
 
 const map = {
     cols: 8,
@@ -349,7 +386,7 @@ class Animal{
         this.sheetLocY = this.color.sheetLocY;
         this.sX = 96;
         this.sY = 96;   
-        this.pixelPerMove = 15;
+        this.pixelPerMove = 20;
     } 
     updateDirection(giveDirection){
         this.direction = this.type.direction.find((directionOfAnimal) => directionOfAnimal.name == giveDirection);
@@ -392,7 +429,14 @@ class Animal{
         if(this.frame == 4){
             this.frame = 0;
         }  
-        this.y += this.pixelPerMove;
+        if(this.y > 504){
+            this.y = this.y;
+        }
+        else
+        {
+            this.y += this.pixelPerMove;
+        }
+
         drawSprite(animals,this.sheetLocX+(this.sX*this.frame),this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.sX,this.sY);
         this.frame++;
     }
@@ -402,7 +446,14 @@ class Animal{
         if(this.frame == 4){
             this.frame = 0;
         }  
-        this.x += this.pixelPerMove;
+        if(this.x > 504){
+            this.x  = this.x;
+        }
+        else
+        {        
+            this.x += this.pixelPerMove;   
+        }
+
         drawSprite(animals,this.sheetLocX+(this.sX*this.frame),this.sheetLocY,this.sX,this.sY,this.x,this.y,this.sX,this.sY);
         this.frame++;
 
@@ -413,7 +464,13 @@ class Animal{
         if(this.frame == 4){
             this.frame = 0;
         }  
-        this.x -= this.pixelPerMove;
+        if(this.x < 0){
+            this.x  = this.x;
+        }
+        else
+        {        
+            this.x -= this.pixelPerMove; 
+        }
         drawSprite(animals,this.sheetLocX+(3*this.sX)-(this.sX*this.frame),this.sheetLocY,this.sX,this.sY,this.x,this.y,this.sX,this.sY);
         this.frame++;
 
@@ -621,18 +678,57 @@ class AcceptBtn{
             chosenHouse.drawHouse(10,40);
             chosenAnimal.draw();
             renderMap();
-                   
             window.addEventListener("keydown", keysPressed, false);
             window.addEventListener("keyup", keysReleased, false);  
             refreshIntervalId = setInterval(function(){  move_able = true;}, 100 );  
             foodBar.drawFullLevel();
-            waterBar.drawFullLevel();
+            energyBar.drawFullLevel();
             healthBar.drawFullLevel();
-           
+            refreshIntervalIdFoodBar = setInterval(function(){
+
+                    foodBar.currentLevel -= 1;
+
+            },2000);
+            refreshIntervalIdEnergyBar = setInterval(function(){
+
+                    energyBar.currentLevel -= 1;
+
+            },3000);
+            refreshIntervalIdHealthBar = setInterval(function(){
+                if(foodBar.currentLevel <= 0 || energyBar.currentLevel <= 0){
+                    healthBar.currentLevel -= 1;
+                }
+                if(healthBar.currentLevel <= 0){
+                    console.log("gameover");
+                    clearInterval(refreshIntervalId);
+                    clearInterval(refreshIntervalIdFoodBar);
+                    clearInterval(refreshIntervalIdEnergyBar);
+                    clearInterval(refreshIntervalAllBars);
+                    clearInterval(refreshIntervalFoodBubble);
+                    clearInterval(refreshIntervalEenergyBubble);
+                    clearInterval(refreshIntervalIdHealthBar);
+                    clearBubble(0,0,canvasBackground.width, canvasBackground.height);
+                    clearSprites(0,0,canvas.width, canvas.height);
+                    clearBackground(0,0,canvasBubble.width, canvasBubble.height);
+                    ctx.font = "50px myFont"; // set font
+                    ctx.textAlign = "center"; // center text
+                    ctx.fillStyle = "#ffffff "
+                    ctx.fillText("GAME OVER", 305,300);
+
+                }
+            },100);
+            refreshIntervalAllBars = setInterval(function(){
+                foodBar.drawCurrentLevel();
+                energyBar.drawCurrentLevel();
+                healthBar.drawCurrentLevel();
+            },100)
+            drawFoodAndEnergy();
+            bubbleFoodTutorial();
+            document.getElementById("layer1").style.zIndex = 1;
+            document.getElementById("layer3").style.zIndex = 2;
+
         }      
     }
-
-
 
     reset(){
         if(stage == "choseColor"){
@@ -641,6 +737,34 @@ class AcceptBtn{
         }             
     }
 }
+
+function drawFoodAndEnergy(){
+    drawBackgroundSprite(bars,0,938,126,140,20,510,63,70);
+    drawBackgroundSprite(bars,7,231,105,105,510,510,63,63);
+
+}
+
+function bubbleFoodTutorial(){
+    refreshIntervalFoodBubble = setInterval(function(){
+        if(chosenAnimal.x < 53 && chosenAnimal.y > 400){
+        drawBubble(foodBubble,30,382,216,150);
+        }
+        else if(chosenAnimal.x > 53 || chosenAnimal.y < 400)
+        {
+            clearBubble(30,382,216,150);
+        }
+        if(chosenAnimal.x > 450 && chosenAnimal.y > 450){
+            drawBubble(energyBubble,360,392,205,150);
+        }
+        else if(chosenAnimal.x < 450 || chosenAnimal.y < 450)
+        {
+            clearBubble(360,392,205,150);
+        }
+    },
+     150);   
+}
+ 
+
 
 
 class Level {
@@ -684,7 +808,6 @@ class Level {
     }
 
     draw(){
-        console.log("draw");
         clear(this.x, this.y, this.scaledX,this.scaledY)
         drawSprite(bars,this.sheetLocX,this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.scaledX,this.scaledY);
     }
@@ -695,8 +818,6 @@ class Level {
         drawSprite(bars,this.sheetLocX,this.sheetLocY,this.sX,this.sY,this.x ,this.y,this.scaledX,this.scaledY);
     }
 }
-
-var ll = new Level(20,20,"green")
 
 
 class Bar{
@@ -748,9 +869,9 @@ class Bar{
         for(let i =0 ; i<14 ; i++){
             this.levels.push((new Level((this.x+5) + (10*i), this.y + 3, this.color)));
         }
+        this.maxLevels = 14;
+        this.currentLevel= 14;
     }
-
-
 
     draw(){
         clear(this.x, this.y, this.scaledX,this.scaledY)
@@ -760,12 +881,17 @@ class Bar{
     }
     
 
-    drawCertianLevel(x){
+    drawCurrentLevel(){
         this.levels = []
-        for(let i =0 ; i<x ; i++){
-            this.levels.push((new Level((this.x+5) + (10*i), this.y + 3, this.color)));
+        if(this.currentLevel < 0){
+            this.currentLevel = 0;
         }
+        else{
+            for(let i =0 ; i<this.currentLevel ; i++){
+            this.levels.push((new Level((this.x+5) + (10*i), this.y + 3, this.color)));
+        } 
         this.draw();
+        }
     }
 
     drawFullLevel(){
@@ -775,8 +901,6 @@ class Bar{
         }
         this.draw();
     }
-
-
 
 }
 
@@ -805,7 +929,7 @@ var acceptBtn = new AcceptBtn(430,500);
 
 var foodBar = new Bar(430,20, "yellow", "food");
 
-var waterBar = new Bar(430,50, "blue", "energy");
+var energyBar = new Bar(430,50, "blue", "energy");
 
 var healthBar = new Bar(430,80, "green", "heart");
 
@@ -902,20 +1026,16 @@ canvas.addEventListener('click', (event) => {
 
  
 var keys = [];
- 
-var save = 14;
 
 var move_able = true;
+var foodTuorial = true;
+var energyTutorial = true;
 
 function keysPressed(e) {
     // store an entry for every key pressed
-    keys[e.keyCode] = true;
-    
-    
+    keys[e.keyCode] = true; 
     // left
     if (keys[37] && move_able == true) {
-        save -= 1;
-        foodBar.drawCertianLevel(save);
       chosenAnimal.moveLEFT();
       move_able = false;
     }
@@ -937,6 +1057,21 @@ function keysPressed(e) {
         chosenAnimal.moveDOWN();
         move_able = false;
     }
+    if (keys[69]) {
+        if(chosenAnimal.x < 53 && chosenAnimal.y > 400){
+           if(foodBar.currentLevel < foodBar.maxLevels){
+                foodBar.currentLevel += 1 
+           }
+        }
+        else if(chosenAnimal.x > 450 && chosenAnimal.y > 450){
+            if(energyBar.currentLevel < energyBar.maxLevels){
+                energyBar.currentLevel += 1  
+            }
+
+        }
+        
+    }
+
  
     e.preventDefault();
           

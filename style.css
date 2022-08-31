@@ -10,11 +10,17 @@
   height: 100vh;
   border: 2px solid #006100;
   }
+  #layer3{
+  border: 2px solid #006100;
+  position: absolute;
+  z-index: 1;
+  background-color: transparent;
+}
 #layer1{
   background-color: transparent;
   border: 2px solid #006100;
   position: absolute;
-  z-index: 1;
+  z-index: 2;
   opacity: 1
   
 }
@@ -23,6 +29,7 @@
   position: absolute;
   z-index: 0;
 }
+
 img{
   image-rendering: -moz-crisp-edges;
   image-rendering: -webkit-crisp-edges;
